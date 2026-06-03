@@ -59,7 +59,7 @@ mripley = function(pp, tMax, rmin = .1, rmax = 2, step = .1) {
   out = tidyr::expand_grid(i = 1:d, j = 1:d)
   rs = seq(rmin, rmax, by = step)
   K = purrr::pmap(out, function(i, j) {
-    ni = ifelse(i == j, length(pp[[i]]) - 1, length(pp[i]))
+    ni = ifelse(i == j, length(pp[[i]]) - 1, length(pp[[i]]))
     nj = length(pp[[j]])
     tMax * as.numeric(Coinc(pp[[i]], pp[[j]], rs)) / (ni * nj)
   })

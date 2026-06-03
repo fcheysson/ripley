@@ -3,7 +3,6 @@
 
 ## usethis namespace: start
 #' @importFrom Rcpp sourceCpp
-#' @importFrom magrittr "%>%"
 #' @useDynLib ripley, .registration = TRUE
 ## usethis namespace: end
 NULL
