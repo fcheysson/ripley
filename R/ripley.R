@@ -20,15 +20,12 @@
 #'   ggplot2::geom_line()
 ripley = function(pp, tMax, rmin = .1, rmax = 2, step = .1) {
 
-  # stationary mean
-  n = length(pp)
-  m = n / tMax
-
   # ripley
+  n = length(pp)
   rs = seq(rmin, rmax, by = step)
-  K = as.numeric(Coinc(pp, pp, rs) / n)
+  K = as.numeric(Coinc(pp, pp, rs))
 
-  tibble::tibble(r = rs, ripley = K / m)
+  tibble::tibble(r = rs, ripley = tMax * K / (n * (n-1)))
 
 }
 
@@ -62,9 +59,9 @@ mripley = function(pp, tMax, rmin = .1, rmax = 2, step = .1) {
   out = tidyr::expand_grid(i = 1:d, j = 1:d)
   rs = seq(rmin, rmax, by = step)
   K = purrr::pmap(out, function(i, j) {
-    n = length(pp[[i]])
-    m = length(pp[[j]]) / tMax
-    as.numeric(Coinc(pp[[i]], pp[[j]], rs) / (n*m))
+    ni = ifelse(i == j, length(pp[[i]]) - 1, length(pp[i]))
+    nj = length(pp[[j]])
+    tMax * as.numeric(Coinc(pp[[i]], pp[[j]], rs)) / (ni * nj)
   })
 
   out %>% dplyr::mutate(r = list(rs), ripley = K) %>% tidyr::unnest(cols = c(r, ripley))
